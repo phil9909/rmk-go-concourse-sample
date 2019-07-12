@@ -1,4 +1,5 @@
 plugin "go"
+plugin "concourse-resource"
 
 def all()
     build()
@@ -6,4 +7,21 @@ end
 
 def build()
     go_build("hello-world", ".")
+end
+
+def release()
+    githubReleaseConcourse = ConcourseResourceDefinition.new("
+        type: github-release
+        source:
+            owner: phil9909
+            repository: rmk-go-concourse-sample
+            access_token: 123456789abcdefghijklmnop
+    ")
+
+    build() + concourse_put("release", githubReleaseConcourse, "
+        name: release/name
+        tag: release/name
+        globs:
+        - build/hello-world
+    ")
 end
