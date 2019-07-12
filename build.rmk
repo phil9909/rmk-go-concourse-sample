@@ -1,0 +1,9 @@
+plugin "go"
+
+def all()
+    build()
+end
+
+def build()
+    go_build("hello-world", ".")
+end
